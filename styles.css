@@ -7,7 +7,7 @@
 
 body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: #bbbbbb;
     min-height: 100vh;
     color: #333;
 }
@@ -36,7 +36,7 @@ header h1 {
 }
 
 header h1 i {
-    color: #667eea;
+    color: #ffc40e;
     margin-right: 10px;
 }
 
@@ -58,12 +58,12 @@ header h1 i {
 }
 
 #searchInput:focus {
-    border-color: #667eea;
+    border-color: #3bb6d5;
 }
 
 #searchBtn {
     padding: 12px 20px;
-    background: #667eea;
+    background: #3bb6d5;
     color: white;
     border: none;
     border-radius: 25px;
@@ -73,7 +73,7 @@ header h1 i {
 }
 
 #searchBtn:hover {
-    background: #5a67d8;
+    background: #2a9bb8;
 }
 
 /* Main content */
@@ -116,14 +116,14 @@ main {
 }
 
 .filter-btn:hover {
-    border-color: #667eea;
-    color: #667eea;
+    border-color: #3bb6d5;
+    color: #3bb6d5;
 }
 
 .filter-btn.active {
-    background: #667eea;
+    background: #3bb6d5;
     color: white;
-    border-color: #667eea;
+    border-color: #3bb6d5;
 }
 
 /* Book list styles */
@@ -141,7 +141,7 @@ main {
     padding: 20px;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
     transition: transform 0.2s ease, box-shadow 0.2s ease;
-    border-left: 4px solid #667eea;
+    border-left: 4px solid #3bb6d5;
 }
 
 .book-item:hover {
@@ -155,7 +155,7 @@ main {
 }
 
 .book-item.completed {
-    border-left-color: #48bb78;
+    border-left-color: #ffc40e;
 }
 
 .book-cover {
@@ -207,8 +207,8 @@ main {
 }
 
 .status-completed {
-    background: #c6f6d5;
-    color: #2f855a;
+    background: #fff3cd;
+    color: #856404;
 }
 
 .status-archived {
@@ -229,7 +229,7 @@ main {
 }
 
 .star.active {
-    color: #fbbf24;
+    color: #ffc40e;
 }
 
 .book-actions {
@@ -251,12 +251,12 @@ main {
 }
 
 .btn-complete {
-    background: #48bb78;
-    color: white;
+    background: #ffc40e;
+    color: #333;
 }
 
 .btn-complete:hover {
-    background: #38a169;
+    background: #e6b000;
 }
 
 .btn-archive {
@@ -278,13 +278,13 @@ main {
 }
 
 .btn-move-up, .btn-move-down {
-    background: #667eea;
+    background: #3bb6d5;
     color: white;
     padding: 6px 10px;
 }
 
 .btn-move-up:hover, .btn-move-down:hover {
-    background: #5a67d8;
+    background: #2a9bb8;
 }
 
 /* Search results */
@@ -344,7 +344,7 @@ main {
 .add-book-btn {
     width: 100%;
     padding: 12px;
-    background: #667eea;
+    background: #3bb6d5;
     color: white;
     border: none;
     border-radius: 8px;
@@ -355,7 +355,7 @@ main {
 }
 
 .add-book-btn:hover {
-    background: #5a67d8;
+    background: #2a9bb8;
 }
 
 /* Modal styles */
