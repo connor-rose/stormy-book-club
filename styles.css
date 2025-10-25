@@ -280,6 +280,13 @@ main {
     flex-wrap: wrap;
 }
 
+.book-date-added {
+    color: #a0aec0;
+    font-size: 0.85rem;
+    margin-top: 8px;
+    font-style: italic;
+}
+
 .status-badge {
     padding: 4px 12px;
     border-radius: 12px;

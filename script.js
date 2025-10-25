@@ -228,6 +228,7 @@ class BookManager {
                         <span class="status-badge status-${book.status}">${statusBadge}</span>
                         <div class="rating">${stars}</div>
                     </div>
+                    <div class="book-date-added">Added: ${this.formatDate(book.dateAdded)}</div>
                 </div>
                 <div class="book-actions">
                     ${!book.archived ? `
@@ -275,6 +276,15 @@ class BookManager {
             stars += `<i class="fas fa-star star ${activeClass}" data-rating="${i}"></i>`;
         }
         return stars;
+    }
+
+    formatDate(dateString) {
+        const date = new Date(dateString);
+        return date.toLocaleDateString('en-US', {
+            year: 'numeric',
+            month: 'short',
+            day: 'numeric'
+        });
     }
 
     setupBookEventListeners() {
