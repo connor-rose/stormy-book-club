@@ -40,6 +40,7 @@ class BookManager {
     setupSearch() {
         const searchBtn = document.getElementById('searchBtn');
         const searchInput = document.getElementById('searchInput');
+        let searchTimeout;
 
         searchBtn.addEventListener('click', () => this.searchBooks());
         searchInput.addEventListener('keypress', (e) => {
@@ -47,11 +48,32 @@ class BookManager {
                 this.searchBooks();
             }
         });
+
+        // Real-time search as user types
+        searchInput.addEventListener('input', (e) => {
+            const query = e.target.value.trim();
+            
+            // Clear previous timeout
+            clearTimeout(searchTimeout);
+            
+            if (query.length >= 2) {
+                // Debounce search - wait 300ms after user stops typing
+                searchTimeout = setTimeout(() => {
+                    this.searchBooks();
+                }, 300);
+            } else if (query.length === 0) {
+                // Hide dropdown if search is empty
+                this.hideSearchDropdown();
+            }
+        });
     }
 
     async searchBooks() {
         const query = document.getElementById('searchInput').value.trim();
-        if (!query) return;
+        if (!query || query.length < 2) {
+            this.hideSearchDropdown();
+            return;
+        }
 
         try {
             const response = await fetch(`https://www.googleapis.com/books/v1/volumes?q=${encodeURIComponent(query)}&maxResults=12`);
