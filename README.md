@@ -70,4 +70,3 @@ You can easily customize the appearance by modifying `styles.css`:
 - Add new features by extending the JavaScript in `script.js`
 
 Enjoy managing your reading list! 📚
-Book club dashboard
