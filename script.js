@@ -69,7 +69,7 @@ class BookManager {
     }
 
     displaySearchResults(books) {
-        const searchResults = document.getElementById('searchResults');
+        const searchDropdown = document.getElementById('searchDropdown');
         const searchResultsList = document.getElementById('searchResultsList');
         
         if (books.length === 0) {
@@ -78,18 +78,37 @@ class BookManager {
             searchResultsList.innerHTML = books.map(book => this.createSearchResultHTML(book)).join('');
         }
         
-        searchResults.style.display = 'block';
+        searchDropdown.style.display = 'block';
         
         // Add event listeners to add buttons
-        searchResultsList.querySelectorAll('.add-book-btn').forEach(btn => {
+        searchResultsList.querySelectorAll('.add-book-btn-small').forEach(btn => {
             btn.addEventListener('click', (e) => {
-                const bookId = e.target.dataset.bookId;
+                e.stopPropagation();
+                const bookId = e.target.closest('.add-book-btn-small').dataset.bookId;
                 const book = books.find(b => b.id === bookId);
                 this.addBook(book);
-                searchResults.style.display = 'none';
+                this.hideSearchDropdown();
                 document.getElementById('searchInput').value = '';
             });
         });
+
+        // Hide dropdown when clicking outside
+        setTimeout(() => {
+            document.addEventListener('click', this.handleOutsideClick.bind(this));
+        }, 100);
+    }
+
+    handleOutsideClick(e) {
+        const searchContainer = document.querySelector('.search-container');
+        if (!searchContainer.contains(e.target)) {
+            this.hideSearchDropdown();
+        }
+    }
+
+    hideSearchDropdown() {
+        const searchDropdown = document.getElementById('searchDropdown');
+        searchDropdown.style.display = 'none';
+        document.removeEventListener('click', this.handleOutsideClick.bind(this));
     }
 
     createSearchResultHTML(book) {
@@ -99,10 +118,12 @@ class BookManager {
         return `
             <div class="search-result-item">
                 <img src="${coverUrl}" alt="${volumeInfo.title}" class="search-result-cover">
-                <div class="search-result-title">${volumeInfo.title || 'Unknown Title'}</div>
-                <div class="search-result-author">${volumeInfo.authors ? volumeInfo.authors.join(', ') : 'Unknown Author'}</div>
-                <button class="add-book-btn" data-book-id="${book.id}">
-                    <i class="fas fa-plus"></i> Add to List
+                <div class="search-result-info">
+                    <div class="search-result-title">${volumeInfo.title || 'Unknown Title'}</div>
+                    <div class="search-result-author">${volumeInfo.authors ? volumeInfo.authors.join(', ') : 'Unknown Author'}</div>
+                </div>
+                <button class="add-book-btn-small" data-book-id="${book.id}">
+                    <i class="fas fa-plus"></i>
                 </button>
             </div>
         `;
@@ -121,7 +142,7 @@ class BookManager {
             dateAdded: new Date().toISOString()
         };
 
-        this.books.unshift(newBook);
+        this.books.push(newBook);
         this.saveBooks();
         this.renderBooks();
     }
