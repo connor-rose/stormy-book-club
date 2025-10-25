@@ -228,7 +228,10 @@ class BookManager {
                         <span class="status-badge status-${book.status}">${statusBadge}</span>
                         <div class="rating">${stars}</div>
                     </div>
-                    <div class="book-date-added">Added: ${this.formatDate(book.dateAdded)}</div>
+                    <div class="book-dates">
+                        <div class="book-date-added">Added: ${this.formatDate(book.dateAdded)}</div>
+                        ${book.dateCompleted ? `<div class="book-date-completed">Completed: ${this.formatDate(book.dateCompleted)}</div>` : ''}
+                    </div>
                 </div>
                 <div class="book-actions">
                     ${!book.archived ? `
@@ -355,6 +358,9 @@ class BookManager {
         const book = this.books.find(b => b.id === bookId);
         if (book) {
             book.status = status;
+            if (status === 'completed' && !book.dateCompleted) {
+                book.dateCompleted = new Date().toISOString();
+            }
             this.saveBooks();
             this.renderBooks();
         }

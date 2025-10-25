@@ -280,11 +280,21 @@ main {
     flex-wrap: wrap;
 }
 
+.book-dates {
+    margin-top: 8px;
+}
+
 .book-date-added {
     color: #a0aec0;
     font-size: 0.85rem;
-    margin-top: 8px;
     font-style: italic;
+}
+
+.book-date-completed {
+    color: #ffc40e;
+    font-size: 0.85rem;
+    font-style: italic;
+    margin-top: 2px;
 }
 
 .status-badge {
