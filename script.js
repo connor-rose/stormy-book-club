@@ -220,7 +220,10 @@ class BookManager {
         const stars = this.createStarRating(book.rating);
 
         return `
-            <div class="book-item ${statusClass}" data-book-id="${book.id}">
+            <div class="book-item ${statusClass}" data-book-id="${book.id}" draggable="true">
+                <div class="drag-handle">
+                    <i class="fas fa-grip-vertical"></i>
+                </div>
                 <img src="${book.coverUrl}" alt="${book.title}" class="book-cover">
                 <div class="book-info">
                     <div class="book-title">${book.title}</div>
@@ -243,14 +246,6 @@ class BookManager {
                     </div>
                 </div>
                 <div class="book-actions">
-                    ${!book.archived ? `
-                        <button class="action-btn btn-move-up" data-action="move-up" data-index="${index}">
-                            <i class="fas fa-arrow-up"></i>
-                        </button>
-                        <button class="action-btn btn-move-down" data-action="move-down" data-index="${index}">
-                            <i class="fas fa-arrow-down"></i>
-                        </button>
-                    ` : ''}
                     ${book.status === 'reading' ? `
                         <button class="action-btn btn-complete" data-action="complete" data-book-id="${book.id}">
                             <i class="fas fa-check"></i> Complete
@@ -305,15 +300,8 @@ class BookManager {
             btn.addEventListener('click', (e) => {
                 const action = e.target.closest('.action-btn').dataset.action;
                 const bookId = e.target.closest('.action-btn').dataset.bookId;
-                const index = parseInt(e.target.closest('.action-btn').dataset.index);
 
                 switch (action) {
-                    case 'move-up':
-                        this.moveBook(index, -1);
-                        break;
-                    case 'move-down':
-                        this.moveBook(index, 1);
-                        break;
                     case 'complete':
                         this.updateBookStatus(bookId, 'completed');
                         break;
@@ -332,6 +320,9 @@ class BookManager {
                 }
             });
         });
+
+        // Drag and drop functionality
+        this.setupDragAndDrop();
 
         // Star ratings
         document.querySelectorAll('.star').forEach(star => {
@@ -352,24 +343,80 @@ class BookManager {
         });
     }
 
-    moveBook(currentIndex, direction) {
-        const filteredBooks = this.getFilteredBooks();
-        const newIndex = currentIndex + direction;
+    setupDragAndDrop() {
+        const bookList = document.getElementById('bookList');
+        let draggedElement = null;
+
+        // Drag start
+        bookList.addEventListener('dragstart', (e) => {
+            if (e.target.closest('.book-item')) {
+                draggedElement = e.target.closest('.book-item');
+                draggedElement.style.opacity = '0.5';
+                e.dataTransfer.effectAllowed = 'move';
+                e.dataTransfer.setData('text/html', draggedElement.outerHTML);
+            }
+        });
+
+        // Drag end
+        bookList.addEventListener('dragend', (e) => {
+            if (draggedElement) {
+                draggedElement.style.opacity = '1';
+                draggedElement = null;
+            }
+        });
+
+        // Drag over
+        bookList.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            e.dataTransfer.dropEffect = 'move';
+            
+            const afterElement = this.getDragAfterElement(bookList, e.clientY);
+            if (afterElement == null) {
+                bookList.appendChild(draggedElement);
+            } else {
+                bookList.insertBefore(draggedElement, afterElement);
+            }
+        });
+
+        // Drop
+        bookList.addEventListener('drop', (e) => {
+            e.preventDefault();
+            if (draggedElement) {
+                this.updateBookOrder();
+            }
+        });
+    }
+
+    getDragAfterElement(container, y) {
+        const draggableElements = [...container.querySelectorAll('.book-item:not(.dragging)')];
         
-        if (newIndex < 0 || newIndex >= filteredBooks.length) return;
+        return draggableElements.reduce((closest, child) => {
+            const box = child.getBoundingClientRect();
+            const offset = y - box.top - box.height / 2;
+            
+            if (offset < 0 && offset > closest.offset) {
+                return { offset: offset, element: child };
+            } else {
+                return closest;
+            }
+        }, { offset: Number.NEGATIVE_INFINITY }).element;
+    }
 
-        const bookToMove = filteredBooks[currentIndex];
-        const bookAtNewPosition = filteredBooks[newIndex];
-
-        // Find actual indices in the main books array
-        const actualIndex1 = this.books.findIndex(book => book.id === bookToMove.id);
-        const actualIndex2 = this.books.findIndex(book => book.id === bookAtNewPosition.id);
-
-        // Swap books
-        [this.books[actualIndex1], this.books[actualIndex2]] = [this.books[actualIndex2], this.books[actualIndex1]];
+    updateBookOrder() {
+        const bookList = document.getElementById('bookList');
+        const bookElements = bookList.querySelectorAll('.book-item');
+        const newOrder = [];
         
+        bookElements.forEach(element => {
+            const bookId = element.dataset.bookId;
+            const book = this.books.find(b => b.id === bookId);
+            if (book) {
+                newOrder.push(book);
+            }
+        });
+        
+        this.books = newOrder;
         this.saveBooks();
-        this.renderBooks();
     }
 
     updateBookStatus(bookId, status) {

@@ -232,6 +232,31 @@ main {
     transition: transform 0.2s ease, box-shadow 0.2s ease;
     border-left: 4px solid #3bb6d5;
     position: relative;
+    cursor: move;
+}
+
+.drag-handle {
+    color: #a0aec0;
+    margin-right: 15px;
+    cursor: grab;
+    font-size: 16px;
+    padding: 5px;
+    border-radius: 4px;
+    transition: all 0.2s ease;
+}
+
+.drag-handle:hover {
+    color: #3bb6d5;
+    background: #f7fafc;
+}
+
+.drag-handle:active {
+    cursor: grabbing;
+}
+
+.book-item.dragging {
+    opacity: 0.5;
+    transform: rotate(5deg);
 }
 
 .book-item:hover {
