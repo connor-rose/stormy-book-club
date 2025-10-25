@@ -87,15 +87,17 @@ header h1 i {
 
 /* Search dropdown */
 .search-dropdown {
-    position: absolute;
-    top: 100%;
-    left: 0;
-    right: 0;
+    position: fixed;
+    top: auto;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 500px;
+    max-width: calc(100vw - 40px);
     background: white;
     border: 2px solid #e2e8f0;
     border-radius: 12px;
     box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
-    z-index: 99999;
+    z-index: 999999;
     max-height: 400px;
     overflow-y: auto;
 }

@@ -100,6 +100,10 @@ class BookManager {
             searchResultsList.innerHTML = books.map(book => this.createSearchResultHTML(book)).join('');
         }
         
+        // Position dropdown below search bar
+        const searchContainer = document.querySelector('.search-container');
+        const searchRect = searchContainer.getBoundingClientRect();
+        searchDropdown.style.top = (searchRect.bottom + window.scrollY + 10) + 'px';
         searchDropdown.style.display = 'block';
         
         // Add event listeners to add buttons
