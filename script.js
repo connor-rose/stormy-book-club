@@ -161,7 +161,8 @@ class BookManager {
             status: 'reading',
             rating: 0,
             archived: false,
-            dateAdded: new Date().toISOString()
+            dateAdded: new Date().toISOString(),
+            iconType: 'frog' // Default to frog
         };
 
         this.books.push(newBook);
@@ -231,6 +232,14 @@ class BookManager {
                     <div class="book-dates">
                         <div class="book-date-added">Added: ${this.formatDate(book.dateAdded)}</div>
                         ${book.dateCompleted ? `<div class="book-date-completed">Completed: ${this.formatDate(book.dateCompleted)}</div>` : ''}
+                    </div>
+                    <div class="book-icon-picker">
+                        <button class="icon-btn ${book.iconType === 'frog' ? 'active' : ''}" data-icon="frog" data-book-id="${book.id}">
+                            <i class="fas fa-frog"></i>
+                        </button>
+                        <button class="icon-btn ${book.iconType === 'elephant' ? 'active' : ''}" data-icon="elephant" data-book-id="${book.id}">
+                            <i class="fas fa-elephant"></i>
+                        </button>
                     </div>
                 </div>
                 <div class="book-actions">
@@ -332,6 +341,15 @@ class BookManager {
                 this.updateBookRating(bookId, rating);
             });
         });
+
+        // Icon picker
+        document.querySelectorAll('.icon-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                const iconType = e.target.closest('.icon-btn').dataset.icon;
+                const bookId = e.target.closest('.icon-btn').dataset.bookId;
+                this.updateBookIcon(bookId, iconType);
+            });
+        });
     }
 
     moveBook(currentIndex, direction) {
@@ -370,6 +388,15 @@ class BookManager {
         const book = this.books.find(b => b.id === bookId);
         if (book) {
             book.rating = rating;
+            this.saveBooks();
+            this.renderBooks();
+        }
+    }
+
+    updateBookIcon(bookId, iconType) {
+        const book = this.books.find(b => b.id === bookId);
+        if (book) {
+            book.iconType = iconType;
             this.saveBooks();
             this.renderBooks();
         }

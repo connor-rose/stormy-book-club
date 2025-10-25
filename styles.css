@@ -231,6 +231,7 @@ main {
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
     transition: transform 0.2s ease, box-shadow 0.2s ease;
     border-left: 4px solid #3bb6d5;
+    position: relative;
 }
 
 .book-item:hover {
@@ -297,6 +298,58 @@ main {
     font-size: 0.85rem;
     font-style: italic;
     margin-top: 2px;
+}
+
+.book-icon-picker {
+    position: absolute;
+    bottom: 15px;
+    right: 15px;
+    display: flex;
+    gap: 5px;
+}
+
+.icon-btn {
+    width: 32px;
+    height: 32px;
+    border: 2px solid #e2e8f0;
+    border-radius: 50%;
+    background: white;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    transition: all 0.2s ease;
+}
+
+.icon-btn:hover {
+    transform: scale(1.1);
+}
+
+.icon-btn.active {
+    border-width: 3px;
+}
+
+.icon-btn[data-icon="frog"] {
+    color: #48bb78;
+}
+
+.icon-btn[data-icon="frog"]:hover,
+.icon-btn[data-icon="frog"].active {
+    background: #48bb78;
+    color: white;
+    border-color: #48bb78;
+}
+
+.icon-btn[data-icon="elephant"] {
+    color: #9f7aea;
+}
+
+.icon-btn[data-icon="elephant"]:hover,
+.icon-btn[data-icon="elephant"].active {
+    background: #9f7aea;
+    color: white;
+    border-color: #9f7aea;
 }
 
 .status-badge {
