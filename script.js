@@ -163,7 +163,7 @@ class BookManager {
             title: volumeInfo.title || 'Unknown Title',
             author: volumeInfo.authors ? volumeInfo.authors.join(', ') : 'Unknown Author',
             coverUrl: volumeInfo.imageLinks?.thumbnail || 'https://via.placeholder.com/150x200?text=No+Cover',
-            status: 'reading',
+            status: 'upcoming',
             rating: 0,
             archived: false,
             dateAdded: new Date().toISOString(),
@@ -195,6 +195,8 @@ class BookManager {
 
     getFilteredBooks() {
         switch (this.currentFilter) {
+            case 'upcoming':
+                return this.books.filter(book => book.status === 'upcoming' && !book.archived);
             case 'reading':
                 return this.books.filter(book => book.status === 'reading' && !book.archived);
             case 'completed':
@@ -209,6 +211,7 @@ class BookManager {
     getEmptyStateHTML() {
         const messages = {
             all: { icon: 'fas fa-book', title: 'No books yet', text: 'Start by searching for books to add to your list!' },
+            upcoming: { icon: 'fas fa-calendar', title: 'No upcoming books', text: 'Add some books to your upcoming list!' },
             reading: { icon: 'fas fa-book-open', title: 'No books in progress', text: 'Add some books to start reading!' },
             completed: { icon: 'fas fa-check-circle', title: 'No completed books', text: 'Finish reading some books to see them here!' },
             archived: { icon: 'fas fa-archive', title: 'No archived books', text: 'Archive books you want to hide from your main list.' }
@@ -256,6 +259,11 @@ class BookManager {
                     </div>
                 </div>
                 <div class="book-actions">
+                    ${book.status === 'upcoming' ? `
+                        <button class="action-btn btn-complete" data-action="start-reading" data-book-id="${book.id}">
+                            <i class="fas fa-play"></i> Start Reading
+                        </button>
+                    ` : ''}
                     ${book.status === 'reading' ? `
                         <button class="action-btn btn-complete" data-action="complete" data-book-id="${book.id}">
                             <i class="fas fa-check"></i> Complete
@@ -279,11 +287,12 @@ class BookManager {
 
     getStatusBadge(status) {
         const badges = {
+            upcoming: 'Upcoming',
             reading: 'Reading',
             completed: 'Completed',
             archived: 'Archived'
         };
-        return badges[status] || 'Reading';
+        return badges[status] || 'Upcoming';
     }
 
     createStarRating(rating) {
@@ -312,6 +321,9 @@ class BookManager {
                 const bookId = e.target.closest('.action-btn').dataset.bookId;
 
                 switch (action) {
+                    case 'start-reading':
+                        this.updateBookStatus(bookId, 'reading');
+                        break;
                     case 'complete':
                         this.updateBookStatus(bookId, 'completed');
                         break;
