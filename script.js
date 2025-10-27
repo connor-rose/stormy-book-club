@@ -1,12 +1,13 @@
 // Book management application
 class BookManager {
     constructor() {
-        this.books = this.loadBooks();
+        this.books = [];
         this.currentFilter = 'all';
         this.init();
     }
 
-    init() {
+    async init() {
+        this.books = await this.loadBooks();
         this.setupEventListeners();
         this.renderBooks();
         this.setupSearch();
@@ -475,11 +476,67 @@ class BookManager {
         }
     }
 
-    saveBooks() {
+    async saveBooks() {
+        // Try to save to Supabase if available
+        if (typeof supabase !== 'undefined') {
+            try {
+                // Delete all existing books first
+                await supabase.from('books').delete().neq('id', '00000000-0000-0000-0000-000000000000');
+                
+                // Insert all books
+                const bookData = this.books.map(book => ({
+                    book_id: book.id,
+                    title: book.title,
+                    author: book.author,
+                    cover_url: book.coverUrl,
+                    status: book.status,
+                    rating: book.rating,
+                    archived: book.archived,
+                    date_added: book.dateAdded,
+                    date_completed: book.dateCompleted || null,
+                    icon_type: book.iconType || 'frog'
+                }));
+                
+                await supabase.from('books').insert(bookData);
+            } catch (error) {
+                console.error('Error saving to Supabase:', error);
+            }
+        }
+        
+        // Fallback to localStorage
         localStorage.setItem('stormyBookClub', JSON.stringify(this.books));
     }
 
-    loadBooks() {
+    async loadBooks() {
+        // Try to load from Supabase if available
+        if (typeof supabase !== 'undefined') {
+            try {
+                const { data, error } = await supabase
+                    .from('books')
+                    .select('*')
+                    .order('created_at', { ascending: true });
+                
+                if (!error && data) {
+                    const books = data.map(row => ({
+                        id: row.book_id,
+                        title: row.title,
+                        author: row.author,
+                        coverUrl: row.cover_url,
+                        status: row.status,
+                        rating: row.rating,
+                        archived: row.archived,
+                        dateAdded: row.date_added,
+                        dateCompleted: row.date_completed,
+                        iconType: row.icon_type || 'frog'
+                    }));
+                    return books;
+                }
+            } catch (error) {
+                console.error('Error loading from Supabase:', error);
+            }
+        }
+        
+        // Fallback to localStorage
         const saved = localStorage.getItem('stormyBookClub');
         return saved ? JSON.parse(saved) : [];
     }
