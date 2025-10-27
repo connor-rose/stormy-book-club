@@ -186,11 +186,6 @@ class BookManager {
 
         bookList.innerHTML = filteredBooks.map((book, index) => this.createBookHTML(book, index)).join('');
         this.setupBookEventListeners();
-        
-        // Initialize Lucide icons
-        if (typeof lucide !== 'undefined') {
-            lucide.createIcons();
-        }
     }
 
     getFilteredBooks() {
@@ -251,10 +246,10 @@ class BookManager {
                     </div>
                     <div class="book-icon-picker">
                         <button class="icon-btn ${book.iconType === 'frog' ? 'active' : ''}" data-icon="frog" data-book-id="${book.id}">
-                            <i data-lucide="square"></i>
+                            <i class="fas fa-cloud"></i>
                         </button>
                         <button class="icon-btn ${book.iconType === 'elephant' ? 'active' : ''}" data-icon="elephant" data-book-id="${book.id}">
-                            <i data-lucide="zap"></i>
+                            <i class="fas fa-bolt"></i>
                         </button>
                     </div>
                 </div>
