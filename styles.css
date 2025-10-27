@@ -347,6 +347,13 @@ main {
     justify-content: center;
     font-size: 14px;
     transition: all 0.2s ease;
+    color: #a0aec0;
+}
+
+.icon-btn svg {
+    width: 18px;
+    height: 18px;
+    stroke-width: 2;
 }
 
 .icon-btn:hover {
@@ -357,22 +364,20 @@ main {
     border-width: 3px;
 }
 
-.icon-btn[data-icon="frog"] {
+.icon-btn[data-icon="frog"]:hover {
     color: #48bb78;
 }
 
-.icon-btn[data-icon="frog"]:hover,
 .icon-btn[data-icon="frog"].active {
     background: #48bb78;
     color: white;
     border-color: #48bb78;
 }
 
-.icon-btn[data-icon="elephant"] {
+.icon-btn[data-icon="elephant"]:hover {
     color: #9f7aea;
 }
 
-.icon-btn[data-icon="elephant"]:hover,
 .icon-btn[data-icon="elephant"].active {
     background: #9f7aea;
     color: white;
