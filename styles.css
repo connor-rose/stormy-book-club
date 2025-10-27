@@ -35,11 +35,15 @@ header h1 {
     color: #4a5568;
     margin-bottom: 20px;
     font-size: 2.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 15px;
 }
 
-header h1 i {
-    color: #ffc40e;
-    margin-right: 10px;
+header h1 .header-icon {
+    width: 48px;
+    height: 48px;
 }
 
 .search-container {
