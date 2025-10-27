@@ -248,10 +248,10 @@ class BookManager {
                     </div>
                     <div class="book-icon-picker">
                         <button class="icon-btn ${book.iconType === 'frog' ? 'active' : ''}" data-icon="frog" data-book-id="${book.id}">
-                            <i data-lucide="zap"></i>
+                            <i data-lucide="square"></i>
                         </button>
                         <button class="icon-btn ${book.iconType === 'elephant' ? 'active' : ''}" data-icon="elephant" data-book-id="${book.id}">
-                            <i data-lucide="heart"></i>
+                            <i data-lucide="zap"></i>
                         </button>
                     </div>
                 </div>
