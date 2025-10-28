@@ -369,13 +369,13 @@ main {
 }
 
 .icon-btn[data-icon="frog"]:hover {
-    color: #48bb78;
+    color: #ff9800;
 }
 
 .icon-btn[data-icon="frog"].active {
-    background: #48bb78;
+    background: #ff9800;
     color: white;
-    border-color: #48bb78;
+    border-color: #ff9800;
 }
 
 .icon-btn[data-icon="elephant"]:hover {
